@@ -24,47 +24,13 @@
 - 可访问的 V10 实例（PHP + MySQL）
 - 生产环境建议 Nginx / Caddy / Apache 反向代理
 
----
-
-## 3. 获取与构建
-
-```bash
-git clone <your-repo-url>
-cd vue-vben-admin-main
-pnpm install
-pnpm build:antd
-```
-
-构建产物：
-
-- `apps/web-antd/dist/` — 静态站点目录
-- `apps/web-antd/dist.zip` — 压缩包（若开启归档）
-
-生产环境变量见 `apps/web-antd/.env.production`：
-
-```env
-VITE_BASE=/
-VITE_GLOB_API_URL=/rjhyyqbu/v1
-VITE_ROUTER_HISTORY=hash
-```
-
-说明：运行时「连接设置」可覆盖实际请求的后台目录与接口站点；`VITE_GLOB_API_URL` 仅作构建期默认值。
-
-若静态资源部署在子路径（例如 `/vben/`），需设置：
-
-```env
-VITE_BASE=/vben/
-```
-
-后重新执行 `pnpm build:antd`。
 
 ---
 
-## 4. 生产部署（Nginx 同源）
+## 3. 生产部署（Nginx 同源）
 
 假设：
 
-- 静态文件目录：`/var/www/v10-admin`（内容为 `dist`）
 - V10 PHP 监听：`127.0.0.1:9212`
 - 后台目录：`rjhyyqbu`（以实际为准）
 
@@ -123,57 +89,11 @@ server {
 2. 将 `apps/web-antd/dist/*` 同步到 `/var/www/v10-admin/`
 3. `nginx -t && systemctl reload nginx`（或等价命令）
 4. 浏览器打开站点 → 右上角「连接设置」确认后台目录 → 登录
-
 HTTPS 请自行配置证书（Let’s Encrypt / 云厂商证书）。
 
----
 
-## 5. GitHub 发布建议
 
-推荐仓库内容：
-
-```text
-vue-vben-admin-main/
-  apps/web-antd/          # 业务前端
-  packages/               # 框架依赖
-  pnpm-workspace.yaml
-  package.json
-  README.md
-  apps/web-antd/DEPLOY.md
-```
-
-不建议提交：
-
-- `node_modules/`
-- `apps/web-antd/dist/`（可用 GitHub Actions 构建产物）
-- `.env.development.local`、含真实密码的本地文件
-
-`.gitignore` 至少包含：
-
-```gitignore
-node_modules
-dist
-dist.zip
-*.local
-.DS_Store
-```
-
-首次推送示例：
-
-```bash
-git init
-git add .
-git commit -m "feat: V10 admin frontend based on vue-vben-admin"
-git branch -M main
-git remote add origin git@github.com:<user>/<repo>.git
-git push -u origin main
-```
-
-可选 CI（`.github/workflows/build.yml`）在 push 时执行 `pnpm install && pnpm build:antd`，并将 `dist` 上传为 Artifact。
-
----
-
-## 6. 连接设置说明
+## 4. 连接设置说明
 
 登录页 / 后台右上角「连接设置」：
 
@@ -187,7 +107,7 @@ git push -u origin main
 
 ---
 
-## 7. 验收清单
+## 5. 验收清单
 
 - [ ] 静态资源可访问，登录页正常
 - [ ] 「连接设置」中后台目录与 V10 一致
@@ -197,7 +117,7 @@ git push -u origin main
 
 ---
 
-## 8. 常见问题
+## 6. 常见问题
 
 | 现象 | 排查 |
 |------|------|
